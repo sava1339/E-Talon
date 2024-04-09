@@ -1,0 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    max-width: 1440px;
+    height: 100vh;
+    margin: auto;
+}
+#root{
+    height: 100%;
+}
+button,p,h1,h2,input{
+    font-family: 'Roboto',sans-serif;
+}
