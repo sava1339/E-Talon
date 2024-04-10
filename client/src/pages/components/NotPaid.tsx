@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from '../../assets/LogoNonTitle.svg';
 import Back from '../../assets/back.svg?react'
 import '../styles/notPaid.css'

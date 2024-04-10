@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import '../styles/informationMain.css';
 import Back from '../../assets/back.svg?react';
 import {QRCodeSVG} from 'qrcode.react';
 import { Scanner } from '@yudiel/react-qr-scanner';
 
 export default function InformationMain() {
-  const [check, setCheck] = useState(false);
-  const [personal,setPersonal] = useState(true);
+  const [check] = useState(false);
+  const [personal] = useState(true);
   return (
     <div className='content'>
       <div className='box'>

@@ -8,9 +8,9 @@ import NotPaid from './components/NotPaid';
 import InformationMain from './components/InformationMain';
 
 export default function mainPage() {
-  const [backgroundDark,setBackgroundDark] = useState(false);
-  const [miniLogo,setMiniLogo] = useState(true);
-  const [selectPage,setSelectPage] = useState(2);
+  const [backgroundDark] = useState(false);
+  const [miniLogo] = useState(true);
+  const [selectPage] = useState(2);
 
   return (
     <div className='main'>

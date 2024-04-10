@@ -16,6 +16,7 @@ export default function Main() {
     })
     buttons[id].classList.add('active');
     setUserTypeSelect(id);
+    console.log( userTypeSelect, login,password)
   }
   return (
     <div className='content'>
