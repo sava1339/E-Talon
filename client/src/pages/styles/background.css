@@ -2,20 +2,32 @@
     position: absolute;
 }
 .back_dec{
-    transition: opacity 0.5s;
     width: 100vw;
-    max-width: 1440px;
 }
 .main{
     height: 100%;
 }
+.mini_logo{
+    height: 60px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
 .background{
     position: relative;
     width: 350px;
-    max-width: 1440px;
     height: 100%;
     margin: auto;
     height: 100%;
+}
+.dark{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.5;
 }
 .content{
     display: flex;
@@ -25,8 +37,45 @@
     width: 85%;
     margin: auto;
 }
-@media screen and (max-height: 660px) {
-    .back_dec{
-        opacity: 0.5;
+.box{
+    background-color: white;
+    padding: 2em 1em;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.button{
+    transition: color 0.3s, background-color 0.3s;
+    padding: 0.5em 1.5em;
+    outline: none;
+    border: 0;
+    border-radius: 5px;
+    color:#6451CE;
+    background: #EBE8FF;
+    font-size: 16px;
+}
+.button:hover{
+    color: #EBE8FF;
+    background: #6451CE;
+    cursor: pointer;
+}
+.active{
+    color: #EBE8FF !important;
+    background: #6451CE !important;
+}
+.full_w{
+    width: 100%;
+}
+@media screen and (min-width: 640px) {
+    .mini_logo{
+        left: 35px;
+        top: 40px;
+        height: 90px;
+    }
+}
+@media screen and (max-width: 400px) {
+    .mini_logo{
+        height: 50px;
     }
 }

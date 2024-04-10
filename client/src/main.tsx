@@ -10,6 +10,7 @@ export const viteEnv = (keyName:string) =>{
   return import.meta.env[`VITE_${keyName}`];
 } 
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Provider store={store}>

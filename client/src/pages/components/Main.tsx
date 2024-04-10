@@ -19,23 +19,25 @@ export default function Main() {
   }
   return (
     <div className='content'>
-          <img className='logo' src={logo} alt="" />
-          <div className='login_select'>
-            <button onClick={()=> selectUserType(0)} className='button_login active'>Ученик</button>
-            <button onClick={()=> selectUserType(1)} className='button_login'>Персонал</button>
-          </div>
-          <p className='input_label'>Введите логин</p>
-          <div className='user_input_box'>
-            <img src={userInpt} alt="" />
-            <input onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setLogin(event.target.value)} className='user_input' placeholder='Логин' type="text" />
-          </div>
-          <p className='input_label'>Введите пароль</p>
-          <div className='user_input_box'>
-            <img src={passwordInput} alt="" />
-            <input onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setPassword(event.target.value)} className='user_input' placeholder='Пароль' type="text" />
-          </div>
-          <button className='full_w button active login'>Войти</button>
-          <button className='full_w button'>Забыли пароль?</button>
+      <div className='box'>
+        <img className='logo' src={logo} alt="" />
+        <div className='login_select'>
+          <button onClick={()=> selectUserType(0)} className='button_login active'>Ученик</button>
+          <button onClick={()=> selectUserType(1)} className='button_login'>Персонал</button>
         </div>
+        <p className='input_label'>Введите логин</p>
+        <div className='user_input_box'>
+          <img src={userInpt} alt="" />
+          <input onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setLogin(event.target.value)} className='user_input' placeholder='Логин' type="text" />
+        </div>
+        <p className='input_label'>Введите пароль</p>
+        <div className='user_input_box'>
+          <img src={passwordInput} alt="" />
+          <input onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setPassword(event.target.value)} className='user_input' placeholder='Пароль' type="text" />
+        </div>
+        <button className='full_w button active login'>Войти</button>
+        <button className='full_w button'>Забыли пароль?</button>
+      </div>
+    </div>
   )
 }

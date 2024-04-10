@@ -24,10 +24,7 @@
     background: #EBE8FF;
     font-size: 16px;
 }
-.active{
-    color: #EBE8FF;
-    background: #6451CE;
-}
+
 .login_select{
     margin-top: 2em;
     width: 100%;
@@ -38,9 +35,6 @@
 }
 .login{
     margin-bottom: 0.5em;
-}
-.full_w{
-    width: 100%;
 }
 .user_input{
     border: 0;

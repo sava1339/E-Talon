@@ -1,0 +1,31 @@
+.logo{
+    width: 160px;
+    margin: 0 auto;
+}
+.button.n_p{
+    font-size: 24px;
+    width: 60%;
+}
+.not_paid_title{
+    text-align: center;
+    color: #6451CE;
+    font-size: 21px;
+    font-weight: 600;
+    margin-top: 2em;
+}
+.not_paid_desc{
+    color:#393939;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 0.5em;
+    margin-bottom: 4em;
+}
+.back{
+    transition: all 0.3s;
+    height: 14px;
+    margin-right: 0.5em;
+    stroke: #6451CE !important;
+}
+.button:hover .back{
+    stroke: #ffffff !important;
+}
