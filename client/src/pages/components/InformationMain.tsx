@@ -7,7 +7,6 @@ import { Scanner } from '@yudiel/react-qr-scanner';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
 import { setPage } from '../../../reducers/pageReducer';
 import { set,ref, getDatabase, get, child, onValue } from 'firebase/database';
-import { userInterface } from '../../types/types';
 
 export default function InformationMain() {
   const [check] = useState(false);
@@ -30,9 +29,9 @@ export default function InformationMain() {
     await get(child(dbRef, `users`)).then(async(snapshot:any) => {
       if (snapshot.exists()) {
         const keys = Object.keys(snapshot.val());
-        snapshot.val().map(async(el:userInterface, i:number)=>{
-          if(el.key === text){
-            if(el.isKeyUsed===2){
+        for(let i = 0; i < keys.length; i++){
+          if(snapshot.val()[keys[i]].key === text){
+            if(snapshot.val()[keys[i]].isKeyUsed === 2){
               await set(ref(db,`users/${keys[i]}/isKeyUsed`),0);
               setScanResult(2);
               return null;
@@ -41,7 +40,7 @@ export default function InformationMain() {
               return null;
             }
           }
-        })
+        }
       }
     })
   }

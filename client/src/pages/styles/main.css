@@ -53,6 +53,7 @@
 }
 .user_input{
     margin-left: 0.5em;
+    flex: 1;
 }
 .input_label{
     font-size: 13px;
