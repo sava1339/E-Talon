@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_2" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 466 466">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2bb673;
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: 50px;
+      }
+    </style>
+  </defs>
+  <g id="_Слой_2-2" data-name=" Слой 2">
+    <circle class="cls-1" cx="233" cy="233" r="233"/>
+    <g id="Layer_1" data-name="Layer 1">
+      <polyline class="cls-2" points="120.07 240.17 191.56 310.01 345.93 156.19"/>
+    </g>
+  </g>
+</svg>

@@ -47,3 +47,18 @@
 .button:hover .back{
     stroke: #ffffff !important;
 }
+.accept_icon{
+    margin-top: 4em;
+    margin-bottom: 4em;
+    width: 200px;
+}
+.accept_box{
+    display: flex;
+    justify-content: center;
+}
+.err{
+    color: rgb(250, 47, 47) !important;
+}
+.scan_data{
+    margin: 0 !important;
+}

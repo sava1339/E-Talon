@@ -46,7 +46,7 @@
     justify-content: center;
 }
 .button{
-    transition: color 0.3s, background-color 0.3s;
+    transition: color 0.3s, background-color 0.3s, padding 0.3s;
     padding: 0.5em 1.5em;
     outline: none;
     border: 0;
@@ -59,10 +59,15 @@
     color: #EBE8FF;
     background: #6451CE;
     cursor: pointer;
+    
+}
+.error_title{
+    color: rgb(247, 40, 40);
 }
 .active{
     color: #EBE8FF !important;
     background: #6451CE !important;
+    
 }
 .full_w{
     width: 100%;
