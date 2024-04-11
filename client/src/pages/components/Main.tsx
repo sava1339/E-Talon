@@ -40,7 +40,7 @@ export default function Main() {
     const auth = getAuth();
     const db = getDatabase();
     setLoadingLogin(true);
-    await signInWithEmailAndPassword (auth, login,password)
+    await signInWithEmailAndPassword (auth, login.toLowerCase(),password.toLowerCase())
       .then(async(userCredential) => {
         const getUser = userCredential.user;
         const dbRef = ref(getDatabase());

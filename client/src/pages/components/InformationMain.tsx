@@ -19,8 +19,9 @@ export default function InformationMain() {
   const db = getDatabase();
   const databaseRef = ref(db,`users/${uid}/isKeyUsed`);
   onValue(databaseRef, (snapshot) => {
+    console.log(snapshot.val())
     const data = snapshot.val();
-    if(data === 0){
+    if(data === 0 && !scand ){
       setScand(true);
     }
   });
@@ -48,7 +49,7 @@ export default function InformationMain() {
     <div className='content'>
       <div className='box'>
         {!personal && !scand && <div className='qr_code'>
-          <QRCodeSVG value={user.key} />
+          <QRCodeSVG  value={user.key} />
           </div>}
         {scand && <div className='accept_box'>
           <img className='accept_icon' src={AcceptIcon} alt="" />
