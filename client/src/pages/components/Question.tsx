@@ -33,7 +33,7 @@ export default function Question() {
         <div className='box question_alt'>
           {accept && <p className="title alt"> Вы уверены, что <span className='white_text alt'>не пойдете</span> сегодня на комплексное  питание?</p>}
           <div className="buttom_box alt">
-            <button onClick={back} className="button alt">Нет, я передума</button>
+            <button onClick={back} className="button alt">Нет, я передумал</button>
             <button onClick={acceptFunc} className="button alt active">Да, я уверен</button>
           </div>
         </div>

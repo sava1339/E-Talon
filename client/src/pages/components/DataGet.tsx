@@ -16,7 +16,6 @@ export default function DataGet() {
       <div className='box'>
         <p className='title'>Информация получена</p>
         <p className='desc'>Хорошего вам дня!</p>
-        <button className='full_w button active i_c top_buttom'>Сменить аккаунт</button>
         <div onClick={back} className='button i_c'> <Back stroke='#fff' className="back" /> <p>Выйти</p></div>
       </div>
     </div>

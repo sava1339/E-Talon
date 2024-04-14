@@ -3,10 +3,11 @@
     height: 250px;
     box-shadow: 0 10px 15px 10px rgb(206, 206, 206);
     border-radius: 5px;
-    margin-bottom: 6em;
+    margin: 0 auto 6em auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 .qr_code svg{
     width: 90%;

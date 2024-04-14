@@ -8,10 +8,12 @@ import InformationMain from './components/InformationMain';
 import { useAppSelector } from '../../store/hook';
 import DataGet from './components/DataGet';
 import Question from './components/Question';
+import ResetPassword from './components/ResetPassword';
 
 export default function mainPage() {
   const {backgroundDark, miniLogo} = useAppSelector(state => state.page); 
-  const page = useAppSelector(state => state.page.page)
+  const page = useAppSelector(state => state.page.page);
+  const showPasswordChange = useAppSelector(state => state.page.showChangePassword);
   
   return (
     <div className='main'>
@@ -21,6 +23,7 @@ export default function mainPage() {
       <img style={{bottom:"0"}} className='absolute back_dec' src={backDec} alt="" />
       {miniLogo && <img className='mini_logo' src={logo} />}
       {backgroundDark && <div className='dark'></div>}
+      {showPasswordChange && <ResetPassword/>}
       <div className='background'>
         {+page == 0 ? <Main/> : null}
         {+page == 1 ? <NotPaid/> : null}

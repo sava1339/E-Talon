@@ -4,11 +4,10 @@ import logo from '../../assets/Logo.svg';
 import userInpt from '../../assets/userInput.svg';
 import passwordInput from '../../assets/passwordInput.svg';
 import { useAppDispatch } from '../../../store/hook';
-import { setBackgroundDark, setMiniLogo, setPersonal, setScand, setUser } from '../../../reducers/pageReducer';
+import { setBackgroundDark, setMiniLogo, setPersonal, setScand, setShowChangePassword, setUser } from '../../../reducers/pageReducer';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { child, get, getDatabase, ref, set } from 'firebase/database';
 import { userInterface } from '../../types/types';
-import ResetPassword from './ResetPassword';
 
 
 
@@ -17,8 +16,7 @@ export default function Main() {
   const [login,setLogin] = useState('');
   const [password,setPassword] = useState('');
   const [loadingLogin,setLoadingLogin] = useState(false);
-  const [errorUserType,setErrorUserType] = useState(false);
-  const [changePasswordContextMenu,setChangePasswordContextMenu] = useState(false);
+  const [errorUserType,setErrorUserType] = useState(0);
   const dispatch = useAppDispatch();
   function generateRandomString(length: number): string {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -30,7 +28,7 @@ export default function Main() {
     return result;
   }
   const selectUserType = (id:number) =>{
-    setChangePasswordContextMenu(false);
+    dispatch(setShowChangePassword(false));
     const buttons = document.querySelectorAll('.button_login');
     buttons.forEach(el => {
       el.classList.remove('active');
@@ -39,7 +37,11 @@ export default function Main() {
     setUserTypeSelect(id);
   }
   const loginFunc = async()=>{
-    setChangePasswordContextMenu(false);
+    if(!login || !password){
+      setErrorUserType(2);
+      return;
+    }
+    dispatch(setShowChangePassword(false));
     const auth = getAuth();
     const db = getDatabase();
     setLoadingLogin(true);
@@ -52,10 +54,10 @@ export default function Main() {
           if (snapshot.exists()) {
             const user:userInterface = snapshot.val();
             if(userTypeSelect == 0 && user.username === "g@gmail.com"){
-              setErrorUserType(true);
+              setErrorUserType(1);
             }
             if(userTypeSelect == 1 && user.username !== "g@gmail.com"){
-              setErrorUserType(true);
+              setErrorUserType(1);
             }
             if(userTypeSelect == 1 && user.username === "g@gmail.com"){
               personal = true;
@@ -181,9 +183,6 @@ export default function Main() {
 
   return (
     <div className='content'>
-      {changePasswordContextMenu && 
-            <ResetPassword/>
-            }
       <div className='box'>
         <img className='logo' src={logo} alt="" />
         {loadingLogin ? 
@@ -212,9 +211,10 @@ export default function Main() {
               <img src={passwordInput} alt="" />
               <input value={password} onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setPassword(event.target.value)} className='user_input' placeholder='Пароль' type="password" />
             </div>
-            {errorUserType && <p className="error_title">Неправильный тип пользователя!</p> }
+            {errorUserType == 1 && <p className="error_title">Неправильный тип пользователя!</p> }
+            {errorUserType == 2 && <p className="error_title">Есть пустые поля!</p> }
             <button onClick={loginFunc} className='full_w button active login'>Войти</button>
-            <button onClick={()=> setChangePasswordContextMenu(!changePasswordContextMenu)} className='full_w button'>Забыли пароль?</button>
+            <button onClick={()=> dispatch(setShowChangePassword(true))} className='full_w button'>Забыли пароль?</button>
           </div>
         }
       </div>

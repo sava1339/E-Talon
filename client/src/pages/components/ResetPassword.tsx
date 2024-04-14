@@ -5,6 +5,7 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import okIcon from '../../assets/Ok.svg'
 import errorIcon from '../../assets/Error.svg'
 import { child, get, getDatabase, ref } from 'firebase/database';
+import cross from '../../assets/cross.svg'
 
 export default function ResetPassword() {
     const [resEmail,setResEmail] = useState("");
@@ -36,6 +37,9 @@ export default function ResetPassword() {
     <div className='reset_password'>
         <div className='reset_password_box'>
             <div className="reset_password_padding">
+              <div>
+              <img src={cross} style={{height: "18px", float:'right'}} alt="" />
+              </div>
                 {paswordChangingError > 0 &&
                     <div className='res_pas_message'>
                         {paswordChangingError == 1 && <img className='message_icon' src={errorIcon} alt="" /> }

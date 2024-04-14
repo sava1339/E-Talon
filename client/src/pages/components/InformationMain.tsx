@@ -65,7 +65,6 @@ export default function InformationMain() {
         </div> }
         {scanResult == 1 && <p className='title err scan_data'>Ошибка сканирования</p>}
         {scanResult == 2 && <p className='title scan_data'>Сканирование успешно!</p>}
-        <button className='full_w button active i_c top_buttom'>Сменить аккаунт</button>
         <div onClick={back} className='button i_c'> <Back stroke='#fff' className="back" /> <p>Выйти</p></div>
       </div>
     </div>
