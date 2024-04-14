@@ -6,7 +6,7 @@ import passwordInput from '../../assets/passwordInput.svg';
 import { useAppDispatch } from '../../../store/hook';
 import { setBackgroundDark, setMiniLogo, setPersonal, setUser } from '../../../reducers/pageReducer';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { child, get, getDatabase, ref, set, update } from 'firebase/database';
+import { child, get, getDatabase, ref, set } from 'firebase/database';
 import { userInterface } from '../../types/types';
 import ResetPassword from './ResetPassword';
 

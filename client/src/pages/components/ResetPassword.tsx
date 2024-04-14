@@ -22,6 +22,7 @@ export default function ResetPassword() {
                       setPaswordChangingError(2);
                     })
                     .catch((e) => {
+                        console.log(e);
                       setPaswordChangingError(1);
                     });
                 }
