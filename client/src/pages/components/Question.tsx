@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import '../styles/question.css';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
 import { setBackgroundDark, setMiniLogo, setPage } from '../../../reducers/pageReducer';
-import { set, ref, getDatabase } from 'firebase/database';
+import { set, ref, getDatabase, get, child } from 'firebase/database';
 
 
 
 export default function Question() {
   const [accept,setAccept] = useState(false);
   const [block,setBlock] = useState(false);
+  const [loading,setLoading] = useState(true);
   const uid = useAppSelector(state => state.page.uid)
   const dispatch = useAppDispatch();
   const db = getDatabase();
@@ -33,13 +34,23 @@ export default function Question() {
     }
   }
   useEffect(()=>{
-    const getTime = async()=>{
+      let lastTime:number = 0;
+      const getTime = async()=>{
+        const dbRef = ref(getDatabase());
+      await get(child(dbRef, `version/time`)).then(async(snapshot:any) => {
+        if (snapshot.exists()) {
+          lastTime = snapshot.val();
+        }
+      })
       const secondTime = await fetch('https://worldtimeapi.org/api/ip',{
         method:"GET",
       }).then(res => res.json())
       const time = secondTime.datetime.slice(11,13)
-      if(!(secondTime.timezone === "Asia/Yekaterinburg") || +time > 9 || +time < 6){
+      if(!(secondTime.timezone === "Asia/Yekaterinburg") || +time > lastTime || +time < 6){
         setBlock(true);
+        setLoading(false);
+      }else{
+        setLoading(false);
       }
     }
     getTime()
@@ -69,12 +80,18 @@ export default function Question() {
         </div>
       :
       <div className='box'>
-        {!block && <p className="title"> Идете ли вы <span className='white_text'>сегодня на комплекс?</span></p>}
-        {block && <p className="title red_color"> Запись с 6:00 до 9:00 утра!</p>}
-        {!block && <div className="buttom_box">
-          <button onClick={acceptFunc} className="button active">Да, иду!</button>
-          <button onClick={back} className="button">Нет</button>
-        </div>}
+        {loading ? 
+        null
+        :
+        <div>
+          {!block && <p className="title"> Идете ли вы <span className='white_text'>сегодня на комплекс?</span></p>}
+          {block && <p className="title red_color"> Запись с 6:00 до 9:00 утра!</p>}
+          {!block && <div className="buttom_box">
+            <button onClick={acceptFunc} className="button active">Да, иду!</button>
+            <button onClick={back} className="button">Нет</button>
+          </div>}
+        </div>
+        }
       </div>
       }
     </div>
