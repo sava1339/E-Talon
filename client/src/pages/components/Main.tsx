@@ -193,6 +193,8 @@ export default function Main() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        setErrorUserType(3);
+        setLoadingLogin(false);
         console.log(errorCode,errorMessage);
       });
   }
@@ -229,6 +231,7 @@ export default function Main() {
             </div>
             {errorUserType == 1 && <p className="error_title">Неправильный тип пользователя!</p> }
             {errorUserType == 2 && <p className="error_title">Есть пустые поля!</p> }
+            {errorUserType == 3 && <p className="error_title">Неверный логин или пароль!</p> }
             <button onClick={loginFunc} className='full_w button active login'>Войти</button>
             <button onClick={()=> dispatch(setShowChangePassword(true))} className='full_w button'>Забыли пароль?</button>
           </div>
