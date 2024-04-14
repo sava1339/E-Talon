@@ -11,6 +11,7 @@ export default function Question() {
   const [accept,setAccept] = useState(false);
   const [block,setBlock] = useState(false);
   const [loading,setLoading] = useState(true);
+  const [lastTimeText,setlastTimeText] = useState('');
   const uid = useAppSelector(state => state.page.uid)
   const dispatch = useAppDispatch();
   const db = getDatabase();
@@ -40,6 +41,7 @@ export default function Question() {
       await get(child(dbRef, `version/time`)).then(async(snapshot:any) => {
         if (snapshot.exists()) {
           lastTime = snapshot.val();
+          setlastTimeText(snapshot.val());
         }
       })
       const secondTime = await fetch('https://worldtimeapi.org/api/ip',{
@@ -72,7 +74,7 @@ export default function Question() {
       {accept? 
         <div className='box question_alt'>
           {accept && !block && <p className="title alt"> Вы уверены, что <span className='white_text alt'>не пойдете</span> сегодня на комплексное  питание?</p>}
-          {block && <p className="title red_color"> Запись с 6:00 до 21:00!</p>}
+          {block && <p className="title red_color"> Запись с 6:00 до {lastTimeText}:00!</p>}
           <div className="buttom_box alt">
             <button onClick={back} className="button alt">Нет, я передумал</button>
             <button onClick={acceptFunc} className="button alt active">Да, я уверен</button>
@@ -85,7 +87,7 @@ export default function Question() {
         :
         <div>
           {!block && <p className="title"> Идете ли вы <span className='white_text'>сегодня на комплекс?</span></p>}
-          {block && <p className="title red_color"> Запись с 6:00 до 9:00 утра!</p>}
+          {block && <p className="title red_color"> Запись с 6:00 до {lastTimeText}:00 утра!</p>}
           {!block && <div className="buttom_box">
             <button onClick={acceptFunc} className="button active">Да, иду!</button>
             <button onClick={back} className="button">Нет</button>
