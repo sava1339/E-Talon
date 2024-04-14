@@ -6,10 +6,14 @@ import okIcon from '../../assets/Ok.svg'
 import errorIcon from '../../assets/Error.svg'
 import { child, get, getDatabase, ref } from 'firebase/database';
 import cross from '../../assets/cross.svg'
+import { useAppDispatch, useAppSelector } from '../../../store/hook';
+import { setShowChangePassword } from '../../../reducers/pageReducer';
 
 export default function ResetPassword() {
     const [resEmail,setResEmail] = useState("");
     const [paswordChangingError,setPaswordChangingError] = useState(0);
+    const showPasswordChange = useAppSelector(state =>state.page.showChangePassword)
+    const dispatch = useAppDispatch();
     const resetPassword = async() =>{
         const dbRef = ref(getDatabase());
         const auth = getAuth();
@@ -37,8 +41,8 @@ export default function ResetPassword() {
     <div className='reset_password'>
         <div className='reset_password_box'>
             <div className="reset_password_padding">
-              <div>
-              <img src={cross} style={{height: "18px", float:'right'}} alt="" />
+              <div className='cross' onClick={()=>dispatch(setShowChangePassword(!showPasswordChange))}>
+              <img  src={cross} style={{height: "18px", float:'right'}} alt="" />
               </div>
                 {paswordChangingError > 0 &&
                     <div className='res_pas_message'>

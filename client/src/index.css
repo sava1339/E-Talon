@@ -3,11 +3,13 @@
     padding: 0;
 }
 body{
-    height: 100vh;
+    min-height: 100vh;
     margin: auto;
+    position: relative;
+    overflow-x: hidden;
 }
 #root{
-    height: 100%;
+    min-height: 100vh;
 }
 button,p,h1,h2,input{
     font-family: 'Roboto',sans-serif;

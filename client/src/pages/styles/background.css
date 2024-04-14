@@ -5,7 +5,7 @@
     width: 100vw;
 }
 .main{
-    height: 100%;
+    min-height: 100vh;
 }
 .mini_logo{
     height: 60px;
@@ -15,9 +15,9 @@
 }
 .background{
     width: 350px;
-    height: 100%;
     margin: auto;
-    height: 100%;
+    min-height: 100vh;
+    display: flex;
 }
 .dark{
     width: 100vw;

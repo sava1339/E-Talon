@@ -92,7 +92,6 @@
     animation: rotation 1s linear infinite;
     margin: 4em auto 0 auto;
   }
-  
   @keyframes rotation {
     0% {
       transform: rotate(0deg);
