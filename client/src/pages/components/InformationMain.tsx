@@ -64,11 +64,18 @@ export default function InformationMain() {
           <img className='accept_icon' src={AcceptIcon} alt="" />
         </div> }
         {personal && <div className='qr_code scan'>
+          {scanActive ? 
+            <Scanner
+            onResult={(text) => scan(text)}
+            onError={(error) => console.log(error?.message)}
+        />
+          :
           <Scanner
               onResult={(text) => scan(text)}
               onError={(error) => console.log(error?.message)}
-              enabled={scanActive}
+              enabled={false}
           />
+          }
         </div> }
         {scanResult == 1 && <p className='title err scan_data'>Ошибка сканирования</p>}
         {scanResult == 2 && <p className='title scan_data'>Сканирование успешно!</p>}
