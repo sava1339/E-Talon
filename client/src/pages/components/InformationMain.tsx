@@ -50,6 +50,7 @@ export default function InformationMain() {
     })
   }
   const back = ()=>{
+    localStorage.removeItem('token');
     dispatch(setMiniLogo(false));
     dispatch(setBackgroundDark(false));
     dispatch(setPage(0));

@@ -22,6 +22,7 @@ export default function Question() {
     }
   }
   const back = async() =>{
+    localStorage.removeItem('token');
     dispatch(setMiniLogo(true));
     dispatch(setBackgroundDark(false));
     await set(ref(db,`users/${uid}/info`),2);
