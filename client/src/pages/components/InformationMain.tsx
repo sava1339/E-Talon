@@ -11,6 +11,7 @@ import { set,ref, getDatabase, get, child, onValue } from 'firebase/database';
 export default function InformationMain() {
   const scand = useAppSelector(state=> state.page.scand);
   const [scanResult,setScanResult] = useState(0);
+  const [scanActive,setScanActive] = useState(true);
   const personal = useAppSelector(state => state.page.personal);
   const user = useAppSelector(state => state.page.user);
   const uid = useAppSelector(state => state.page.uid);
@@ -33,6 +34,11 @@ export default function InformationMain() {
             if(snapshot.val()[keys[i]].isKeyUsed === 2){
               await set(ref(db,`users/${keys[i]}/isKeyUsed`),0);
               setScanResult(2);
+              setScanActive(false);
+              setTimeout(()=>{
+                setScanActive(true);
+                setScanResult(0);
+              },500)
               break;
             }else{
               setScanResult(1);
@@ -61,6 +67,7 @@ export default function InformationMain() {
           <Scanner
               onResult={(text) => scan(text)}
               onError={(error) => console.log(error?.message)}
+              enabled={scanActive}
           />
         </div> }
         {scanResult == 1 && <p className='title err scan_data'>Ошибка сканирования</p>}
