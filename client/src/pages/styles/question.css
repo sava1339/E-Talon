@@ -1,0 +1,29 @@
+.buttom_box{
+    margin: 4em auto 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 80%;
+}
+.buttom_box.alt{
+    flex-direction: column;
+    margin: 2em auto 0 auto;
+}
+.buttom_box button:last-child{
+    margin-left: 1em;
+}
+.title.alt{
+    color: #393939;
+}
+
+.white_text{
+    color: #393939;
+}
+.white_text.alt{
+    color: #6451CE;
+}
+.buttom_box.alt button:last-child{
+    margin: 0;
+}
+.button.alt{
+    margin: 2em 0;
+}

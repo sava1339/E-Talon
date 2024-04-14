@@ -5,11 +5,10 @@ import AcceptIcon from '../../assets/AcceptIcon.svg'
 import {QRCodeSVG} from 'qrcode.react';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
-import { setPage } from '../../../reducers/pageReducer';
+import { setBackgroundDark, setMiniLogo, setPage } from '../../../reducers/pageReducer';
 import { set,ref, getDatabase, get, child, onValue } from 'firebase/database';
 
 export default function InformationMain() {
-  const [check] = useState(false);
   const [scand,setScand] = useState(false);
   const [scanResult,setScanResult] = useState(0);
   const personal = useAppSelector(state => state.page.personal);
@@ -19,7 +18,6 @@ export default function InformationMain() {
   const db = getDatabase();
   const databaseRef = ref(db,`users/${uid}/isKeyUsed`);
   onValue(databaseRef, (snapshot) => {
-    console.log(snapshot.val())
     const data = snapshot.val();
     if(data === 0 && !scand ){
       setScand(true);
@@ -35,15 +33,20 @@ export default function InformationMain() {
             if(snapshot.val()[keys[i]].isKeyUsed === 2){
               await set(ref(db,`users/${keys[i]}/isKeyUsed`),0);
               setScanResult(2);
-              return null;
+              break;
             }else{
               setScanResult(1);
-              return null;
+              break;
             }
           }
         }
       }
     })
+  }
+  const back = ()=>{
+    dispatch(setMiniLogo(false));
+    dispatch(setBackgroundDark(false));
+    dispatch(setPage(0));
   }
   return (
     <div className='content'>
@@ -62,10 +65,8 @@ export default function InformationMain() {
         </div> }
         {scanResult == 1 && <p className='title err scan_data'>Ошибка сканирования</p>}
         {scanResult == 2 && <p className='title scan_data'>Сканирование успешно!</p>}
-        {check && <p className='title'>Информация получена</p>}
-        {check && <p className='desc'>Хорошего вам дня!</p>}
         <button className='full_w button active i_c top_buttom'>Сменить аккаунт</button>
-        <div onClick={()=> dispatch(setPage(0))} className='button i_c'> <Back stroke='#fff' className="back" /> <p>Выйти</p></div>
+        <div onClick={back} className='button i_c'> <Back stroke='#fff' className="back" /> <p>Выйти</p></div>
       </div>
     </div>
   )

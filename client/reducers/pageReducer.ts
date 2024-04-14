@@ -5,7 +5,9 @@ type pageState = {
     page:number,
     personal:boolean,
     user:userInterface,
-    uid:string
+    uid:string,
+    backgroundDark:boolean,
+    miniLogo:boolean
 }
 type setPersonalAction ={
     page:number,
@@ -28,7 +30,9 @@ const initialState:pageState = {
         payment: 0,
         username: "",
     },
-    uid:""
+    uid:"",
+    backgroundDark:false,
+    miniLogo:false
 }
 
 const pageReducer = createSlice({
@@ -45,10 +49,16 @@ const pageReducer = createSlice({
         setUser: (state, action:PayloadAction<setUserAction>) =>{
             state.user = action.payload.user;
             state.uid = action.payload.uid;
+        },
+        setBackgroundDark: (state,action:PayloadAction<boolean>) =>{
+            state.backgroundDark = action.payload
+        },
+        setMiniLogo: (state,action:PayloadAction<boolean>) =>{
+            state.miniLogo = action.payload
         }
     }
 })
 
-export const {setPage, setPersonal,setUser} = pageReducer.actions;
+export const {setPage, setPersonal,setUser,setBackgroundDark,setMiniLogo} = pageReducer.actions;
 
 export default pageReducer.reducer;

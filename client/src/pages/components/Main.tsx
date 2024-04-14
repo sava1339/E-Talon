@@ -4,10 +4,11 @@ import logo from '../../assets/Logo.svg';
 import userInpt from '../../assets/userInput.svg';
 import passwordInput from '../../assets/passwordInput.svg';
 import { useAppDispatch } from '../../../store/hook';
-import { setPersonal, setUser } from '../../../reducers/pageReducer';
+import { setBackgroundDark, setMiniLogo, setPersonal, setUser } from '../../../reducers/pageReducer';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { child, get, getDatabase, ref, set } from 'firebase/database';
+import { child, get, getDatabase, ref, set, update } from 'firebase/database';
 import { userInterface } from '../../types/types';
+import ResetPassword from './ResetPassword';
 
 
 
@@ -17,6 +18,7 @@ export default function Main() {
   const [password,setPassword] = useState('');
   const [loadingLogin,setLoadingLogin] = useState(false);
   const [errorUserType,setErrorUserType] = useState(false);
+  const [changePasswordContextMenu,setChangePasswordContextMenu] = useState(false);
   const dispatch = useAppDispatch();
   function generateRandomString(length: number): string {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -28,6 +30,7 @@ export default function Main() {
     return result;
   }
   const selectUserType = (id:number) =>{
+    setChangePasswordContextMenu(false);
     const buttons = document.querySelectorAll('.button_login');
     buttons.forEach(el => {
       el.classList.remove('active');
@@ -35,8 +38,8 @@ export default function Main() {
     buttons[id].classList.add('active');
     setUserTypeSelect(id);
   }
-
   const loginFunc = async()=>{
+    setChangePasswordContextMenu(false);
     const auth = getAuth();
     const db = getDatabase();
     setLoadingLogin(true);
@@ -44,19 +47,10 @@ export default function Main() {
       .then(async(userCredential) => {
         const getUser = userCredential.user;
         const dbRef = ref(getDatabase());
+        let personal = false;
         await get(child(dbRef, `users/${getUser.uid}`)).then(async(snapshot) => {
           if (snapshot.exists()) {
             const user:userInterface = snapshot.val();
-            const key: string = generateRandomString(12);
-            const dataUser:userInterface = {
-              key: key,
-              info: user.info,
-              isKeyUsed: user.isKeyUsed,
-              name:user.name,
-              schoolClass: user.schoolClass,
-              payment: user.payment,
-              username: user.username
-            }
             if(userTypeSelect == 0 && user.username === "g@gmail.com"){
               setErrorUserType(true);
             }
@@ -64,33 +58,110 @@ export default function Main() {
               setErrorUserType(true);
             }
             if(userTypeSelect == 1 && user.username === "g@gmail.com"){
-              if(user.info === null){
+              personal = true;
+              if(user.info === null || user.info === 0){
                 await set(ref(db,`users/${getUser.uid}/info`),1);
               }
-              if(user.isKeyUsed === null){
+              if(user.isKeyUsed === null || user.isKeyUsed === 0){
+                console.log('s')
                 await set(ref(db,`users/${getUser.uid}/isKeyUsed`),1);
               }
-              if(user.payment === null){
+              if(user.payment === null ||user.payment === 0){
                 await set(ref(db,`users/${getUser.uid}/payment`),1);
               }
-              await set(ref(db,`users/${getUser.uid}/key`),key);
-              dispatch(setUser({user:dataUser,uid:"None"}));
-              dispatch(setPersonal({page:2,personal:true}));
             }
             if(userTypeSelect == 0 && user.username !== "g@gmail.com"){
-              if(user.info === null){
+              personal = false;
+              if(user.info === null || user.info === 0){
                 await set(ref(db,`users/${getUser.uid}/info`),1);
               }
-              if(user.isKeyUsed === null){
+              if(user.isKeyUsed === null || user.isKeyUsed === 0){
                 await set(ref(db,`users/${getUser.uid}/isKeyUsed`),1);
               }
-              if(user.payment === null){
+              if(user.payment === null || user.payment === 0){
                 await set(ref(db,`users/${getUser.uid}/payment`),1);
               }
-              await set(ref(db,`users/${getUser.uid}/key`),key);
-              dispatch(setUser({user:dataUser,uid:getUser.uid}));
-              dispatch(setPersonal({page:2,personal:false}));
             }
+            await get(child(dbRef, `users/${getUser.uid}`)).then(async(snapshot)=>{
+              const afterUser = snapshot.val();
+              const key: string = generateRandomString(12);
+              const dataUser:userInterface = {
+                key: key,
+                info: afterUser.info,
+                isKeyUsed: afterUser.isKeyUsed,
+                name:afterUser.name,
+                schoolClass: afterUser.schoolClass,
+                payment: afterUser.payment,
+                username: afterUser.username
+              }
+              if(personal){
+                if(user.isKeyUsed === 2){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:"None"}));
+                  dispatch(setMiniLogo(true));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setPersonal({page:2,personal:true}));
+                  return;
+                }
+                if(user.info === 2){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:"None"}));
+                  dispatch(setMiniLogo(true));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setPersonal({page:3,personal:true}));
+                  return;
+                }
+                if(user.payment ===2){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:"None"}));
+                  dispatch(setMiniLogo(false));
+                  dispatch(setBackgroundDark(true));
+                  dispatch(setPersonal({page:1,personal:true}));
+                  return;
+                }
+                if(user.payment === 1 && user.isKeyUsed === 1 && user.info === 1){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:"None"}));
+                  dispatch(setMiniLogo(false));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setPersonal({page:4,personal:true}));
+                  return;
+                }
+              }else{
+                if(user.isKeyUsed === 2){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:getUser.uid}));
+                  dispatch(setMiniLogo(true));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setPersonal({page:2,personal:false}));
+                  return;
+                }
+                if(user.info === 2){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:getUser.uid}));
+                  dispatch(setMiniLogo(true));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setPersonal({page:3,personal:false}));
+                  return;
+                }
+                if(user.payment ===2){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:getUser.uid}));
+                  dispatch(setMiniLogo(false));
+                  dispatch(setBackgroundDark(true));
+                  dispatch(setPersonal({page:1,personal:false}));
+                  return;
+                }
+                if(user.payment === 1 && user.isKeyUsed === 1 && user.info === 1){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:getUser.uid}));
+                  dispatch(setMiniLogo(false));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setPersonal({page:4,personal:false}));
+                  return;
+                }
+              }
+            })
             setLoadingLogin(false);
           } else {
             console.log("No data available");
@@ -108,6 +179,9 @@ export default function Main() {
 
   return (
     <div className='content'>
+      {changePasswordContextMenu && 
+            <ResetPassword/>
+            }
       <div className='box'>
         <img className='logo' src={logo} alt="" />
         {loadingLogin ? 
@@ -127,18 +201,18 @@ export default function Main() {
               }
             </div>
             <p className='input_label'>Введите логин</p>
-            <div className='user_input_box'>
+            <div className='input_img'>
               <img src={userInpt} alt="" />
               <input value={login} onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setLogin(event.target.value)} className='user_input' placeholder='Логин' type="text" />
             </div>
             <p className='input_label'>Введите пароль</p>
-            <div className='user_input_box'>
+            <div className='input_img'>
               <img src={passwordInput} alt="" />
               <input value={password} onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setPassword(event.target.value)} className='user_input' placeholder='Пароль' type="password" />
             </div>
             {errorUserType && <p className="error_title">Неправильный тип пользователя!</p> }
             <button onClick={loginFunc} className='full_w button active login'>Войти</button>
-            <button className='full_w button'>Забыли пароль?</button>
+            <button onClick={()=> setChangePasswordContextMenu(!changePasswordContextMenu)} className='full_w button'>Забыли пароль?</button>
           </div>
         }
       </div>

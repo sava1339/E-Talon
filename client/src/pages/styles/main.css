@@ -40,7 +40,7 @@
     border: 0;
     outline: 0;
 }
-.user_input_box{
+.input_img{
     display: flex;
     align-items: center;
     border: 1px solid #a6a4b3;
@@ -48,7 +48,7 @@
     border-radius: 5px;
     margin-bottom: 1em;
 }
-.user_input_box img{
+.input_img img{
     height: 17px;
 }
 .user_input{
