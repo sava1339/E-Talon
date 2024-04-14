@@ -36,7 +36,7 @@ export default function Main() {
     buttons[id].classList.add('active');
     setUserTypeSelect(id);
   }
-  const authUser = async(uid:string)=>{
+  const authUser = async(uid:string,start:number)=>{
     if(uid == ""){
       setErrorUserType(1);
     }
@@ -46,13 +46,13 @@ export default function Main() {
     await get(child(dbRef, `users/${uid}`)).then(async(snapshot) => {
       if (snapshot.exists()) {
         const user:userInterface = snapshot.val();
-        if(userTypeSelect == 0 && user.username === "g@gmail.com"){
+        if(start == 0 && user.username === "g@gmail.com"){
           setErrorUserType(1);
         }
-        if(userTypeSelect == 1 && user.username !== "g@gmail.com"){
+        if(start == 1 && user.username !== "g@gmail.com"){
           setErrorUserType(1);
         }
-        if(userTypeSelect == 1 && user.username === "g@gmail.com"){
+        if(start == 1 && user.username === "g@gmail.com"){
           personal = true;
           if(user.info === null || user.info === 0){
             await set(ref(db,`users/${uid}/info`),1);
@@ -61,7 +61,7 @@ export default function Main() {
             await set(ref(db,`users/${uid}/payment`),1);
           }
         }
-        if(userTypeSelect == 0 && user.username !== "g@gmail.com"){
+        if(start == 0 && user.username !== "g@gmail.com"){
           personal = false;
           if(user.info === null || user.info === 0){
             await set(ref(db,`users/${uid}/info`),1);
@@ -84,6 +84,7 @@ export default function Main() {
           }
           if(personal){
             localStorage.setItem('token',uid);
+            localStorage.setItem('personal',"true");
             if(user.isKeyUsed === 2 || user.isKeyUsed === 0){
               await set(ref(db,`users/${uid}/key`),key);
               dispatch(setUser({user:dataUser,uid:"None"}));
@@ -118,6 +119,7 @@ export default function Main() {
             }
           }else{
             localStorage.setItem('token',uid);
+            localStorage.setItem('personal',"false");
             if(user.isKeyUsed === 0){
               await set(ref(db,`users/${uid}/key`),key);
               dispatch(setUser({user:dataUser,uid:uid}));
@@ -172,7 +174,7 @@ export default function Main() {
   useEffect(()=>{
     if(localStorage.getItem('token')){
       setLoadingLogin(true);
-      authUser(localStorage.getItem('token') || "");
+      authUser(localStorage.getItem('token') || "",localStorage.getItem('personal') == "true" ? 1 : 0);
     }
   },[])
   const loginFunc = async()=>{
@@ -186,7 +188,7 @@ export default function Main() {
     await signInWithEmailAndPassword (auth, login.toLowerCase(),password.toLowerCase())
       .then(async(userCredential) => {
         const getUser = userCredential.user;
-        authUser(getUser.uid);
+        authUser(getUser.uid,userTypeSelect);
         })
       .catch((error) => {
         const errorCode = error.code;

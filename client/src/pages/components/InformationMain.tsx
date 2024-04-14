@@ -11,7 +11,6 @@ import { set,ref, getDatabase, get, child, onValue } from 'firebase/database';
 export default function InformationMain() {
   const scand = useAppSelector(state=> state.page.scand);
   const [scanResult,setScanResult] = useState(0);
-  const [scanActive,setScanActive] = useState(true);
   const personal = useAppSelector(state => state.page.personal);
   const user = useAppSelector(state => state.page.user);
   const uid = useAppSelector(state => state.page.uid);
@@ -34,11 +33,6 @@ export default function InformationMain() {
             if(snapshot.val()[keys[i]].isKeyUsed === 2){
               await set(ref(db,`users/${keys[i]}/isKeyUsed`),0);
               setScanResult(2);
-              setScanActive(false);
-              setTimeout(()=>{
-                setScanActive(true);
-                setScanResult(0);
-              },500)
               break;
             }else{
               setScanResult(1);
@@ -65,18 +59,11 @@ export default function InformationMain() {
           <img className='accept_icon' src={AcceptIcon} alt="" />
         </div> }
         {personal && <div className='qr_code scan'>
-          {scanActive ? 
-            <Scanner
+        <Scanner
             onResult={(text) => scan(text)}
             onError={(error) => console.log(error?.message)}
+            options={{delayBetweenScanSuccess:1000,delayBetweenScanAttempts:1000}}
         />
-          :
-          <Scanner
-              onResult={(text) => scan(text)}
-              onError={(error) => console.log(error?.message)}
-              enabled={false}
-          />
-          }
         </div> }
         {scanResult == 1 && <p className='title err scan_data'>Ошибка сканирования</p>}
         {scanResult == 2 && <p className='title scan_data'>Сканирование успешно!</p>}
