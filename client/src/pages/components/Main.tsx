@@ -4,7 +4,7 @@ import logo from '../../assets/Logo.svg';
 import userInpt from '../../assets/userInput.svg';
 import passwordInput from '../../assets/passwordInput.svg';
 import { useAppDispatch } from '../../../store/hook';
-import { setBackgroundDark, setMiniLogo, setPersonal, setUser } from '../../../reducers/pageReducer';
+import { setBackgroundDark, setMiniLogo, setPersonal, setScand, setUser } from '../../../reducers/pageReducer';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { child, get, getDatabase, ref, set } from 'firebase/database';
 import { userInterface } from '../../types/types';
@@ -62,10 +62,6 @@ export default function Main() {
               if(user.info === null || user.info === 0){
                 await set(ref(db,`users/${getUser.uid}/info`),1);
               }
-              if(user.isKeyUsed === null || user.isKeyUsed === 0){
-                console.log('s')
-                await set(ref(db,`users/${getUser.uid}/isKeyUsed`),1);
-              }
               if(user.payment === null ||user.payment === 0){
                 await set(ref(db,`users/${getUser.uid}/payment`),1);
               }
@@ -74,9 +70,6 @@ export default function Main() {
               personal = false;
               if(user.info === null || user.info === 0){
                 await set(ref(db,`users/${getUser.uid}/info`),1);
-              }
-              if(user.isKeyUsed === null || user.isKeyUsed === 0){
-                await set(ref(db,`users/${getUser.uid}/isKeyUsed`),1);
               }
               if(user.payment === null || user.payment === 0){
                 await set(ref(db,`users/${getUser.uid}/payment`),1);
@@ -95,7 +88,7 @@ export default function Main() {
                 username: afterUser.username
               }
               if(personal){
-                if(user.isKeyUsed === 2){
+                if(user.isKeyUsed === 2 || user.isKeyUsed === 0){
                   await set(ref(db,`users/${getUser.uid}/key`),key);
                   dispatch(setUser({user:dataUser,uid:"None"}));
                   dispatch(setMiniLogo(true));
@@ -128,6 +121,15 @@ export default function Main() {
                   return;
                 }
               }else{
+                if(user.isKeyUsed === 0){
+                  await set(ref(db,`users/${getUser.uid}/key`),key);
+                  dispatch(setUser({user:dataUser,uid:getUser.uid}));
+                  dispatch(setMiniLogo(true));
+                  dispatch(setBackgroundDark(false));
+                  dispatch(setScand(true));
+                  dispatch(setPersonal({page:2,personal:false}));
+                  return;
+                }
                 if(user.isKeyUsed === 2){
                   await set(ref(db,`users/${getUser.uid}/key`),key);
                   dispatch(setUser({user:dataUser,uid:getUser.uid}));

@@ -4,6 +4,7 @@ import { userInterface } from '../src/types/types'
 type pageState = {
     page:number,
     personal:boolean,
+    scand:boolean,
     user:userInterface,
     uid:string,
     backgroundDark:boolean,
@@ -21,6 +22,7 @@ type setUserAction={
 const initialState:pageState = {
     page:0,
     personal:false,
+    scand:false,
     user:{
         key: "",
         info: 0,
@@ -55,10 +57,13 @@ const pageReducer = createSlice({
         },
         setMiniLogo: (state,action:PayloadAction<boolean>) =>{
             state.miniLogo = action.payload
+        },
+        setScand: (state, action:PayloadAction<boolean>)=>{
+            state.scand = action.payload;
         }
     }
 })
 
-export const {setPage, setPersonal,setUser,setBackgroundDark,setMiniLogo} = pageReducer.actions;
+export const {setPage, setPersonal,setUser,setBackgroundDark,setMiniLogo,setScand} = pageReducer.actions;
 
 export default pageReducer.reducer;

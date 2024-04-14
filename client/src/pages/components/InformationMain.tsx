@@ -5,11 +5,11 @@ import AcceptIcon from '../../assets/AcceptIcon.svg'
 import {QRCodeSVG} from 'qrcode.react';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
-import { setBackgroundDark, setMiniLogo, setPage } from '../../../reducers/pageReducer';
+import { setBackgroundDark, setMiniLogo, setPage, setScand } from '../../../reducers/pageReducer';
 import { set,ref, getDatabase, get, child, onValue } from 'firebase/database';
 
 export default function InformationMain() {
-  const [scand,setScand] = useState(false);
+  const scand = useAppSelector(state=> state.page.scand);
   const [scanResult,setScanResult] = useState(0);
   const personal = useAppSelector(state => state.page.personal);
   const user = useAppSelector(state => state.page.user);
@@ -20,7 +20,7 @@ export default function InformationMain() {
   onValue(databaseRef, (snapshot) => {
     const data = snapshot.val();
     if(data === 0 && !scand ){
-      setScand(true);
+      dispatch(setScand(true));
     }
   });
   const scan = async(text:string)=>{
