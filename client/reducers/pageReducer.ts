@@ -9,7 +9,7 @@ type pageState = {
     uid:string,
     backgroundDark:boolean,
     miniLogo:boolean,
-    showChangePassword: boolean
+    showChangePassword: boolean,
 }
 type setPersonalAction ={
     page:number,
@@ -32,6 +32,7 @@ const initialState:pageState = {
         schoolClass: "",
         payment: 0,
         username: "",
+        auto: 0
     },
     uid:"",
     backgroundDark:false,
@@ -66,9 +67,12 @@ const pageReducer = createSlice({
         setShowChangePassword:(state, action:PayloadAction<boolean>)=>{
             state.showChangePassword = action.payload;
         },
+        setAuto: (state, action:PayloadAction<boolean>)=>{
+            state.user.auto = action.payload ? 1 : 0;
+        },
     }
 })
 
-export const {setPage, setPersonal,setUser,setBackgroundDark,setMiniLogo,setScand, setShowChangePassword} = pageReducer.actions;
+export const {setPage, setPersonal,setUser,setBackgroundDark,setMiniLogo,setScand, setShowChangePassword,setAuto} = pageReducer.actions;
 
 export default pageReducer.reducer;

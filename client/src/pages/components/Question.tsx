@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import '../styles/question.css';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
-import { setBackgroundDark, setMiniLogo, setPage } from '../../../reducers/pageReducer';
+import { setAuto, setBackgroundDark, setMiniLogo, setPage } from '../../../reducers/pageReducer';
 import { set, ref, getDatabase, get, child } from 'firebase/database';
 
 
@@ -10,6 +10,7 @@ import { set, ref, getDatabase, get, child } from 'firebase/database';
 export default function Question() {
   const [accept,setAccept] = useState(false);
   const [block,setBlock] = useState(false);
+  const autoCheck = useAppSelector(state => state.page.user.auto);
   const [loading,setLoading] = useState(true);
   const [lastTimeText,setlastTimeText] = useState('');
   const uid = useAppSelector(state => state.page.uid)
@@ -66,6 +67,7 @@ export default function Question() {
       dispatch(setMiniLogo(true));
       dispatch(setBackgroundDark(false));
       await set(ref(db,`users/${uid}/info`),2);
+      await set(ref(db,`users/${uid}/auto`),autoCheck);
       dispatch(setPage(3));
     }
   }
@@ -88,10 +90,15 @@ export default function Question() {
         <div>
           {!block && <p className="title"> Идете ли вы <span className='white_text'>сегодня на комплекс?</span></p>}
           {block && <p className="title red_color"> Запись с 6:00 до {lastTimeText}:00 утра!</p>}
-          {!block && <div className="buttom_box">
+          {!block && 
+          <div className="buttom_box">
             <button onClick={acceptFunc} className="button active">Да, иду!</button>
             <button onClick={back} className="button">Нет</button>
           </div>}
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",margin:"1em 0 0 0"}}>
+            <input type="checkbox" className='checkbox_auto' id="checkbox" checked={!!autoCheck} onChange={()=>dispatch(setAuto(!!!autoCheck))} /> 
+            <label htmlFor="checkbox">Записывать автоматически</label>
+          </div>
         </div>
         }
       </div>

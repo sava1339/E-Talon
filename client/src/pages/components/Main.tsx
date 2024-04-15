@@ -10,7 +10,6 @@ import { child, get, getDatabase, ref, set } from 'firebase/database';
 import { userInterface } from '../../types/types';
 
 
-
 export default function Main() {
   const [userTypeSelect,setUserTypeSelect] = useState(0);
   const [login,setLogin] = useState('');
@@ -48,9 +47,13 @@ export default function Main() {
         const user:userInterface = snapshot.val();
         if(start == 0 && user.username === "g@gmail.com"){
           setErrorUserType(1);
+          setLoadingLogin(false);
+          return;
         }
         if(start == 1 && user.username !== "g@gmail.com"){
           setErrorUserType(1);
+          setLoadingLogin(false);
+          return;
         }
         if(start == 1 && user.username === "g@gmail.com"){
           personal = true;
@@ -80,7 +83,8 @@ export default function Main() {
             name:afterUser.name,
             schoolClass: afterUser.schoolClass,
             payment: afterUser.payment,
-            username: afterUser.username
+            username: afterUser.username,
+            auto: afterUser.auto || 0
           }
           if(personal){
             localStorage.setItem('token',uid);

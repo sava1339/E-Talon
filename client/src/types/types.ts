@@ -6,5 +6,6 @@ export interface userInterface{
     schoolClass: string,
     payment: number,
     username: string,
+    auto?:number
   }
   
