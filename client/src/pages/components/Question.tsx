@@ -8,7 +8,7 @@ import { set, ref, getDatabase, get, child } from 'firebase/database';
 
 
 export default function Question() {
-  const [accept,setAccept] = useState(false);
+  const [accept,setAccept] = useState(0);
   const [block,setBlock] = useState(false);
   const autoCheck = useAppSelector(state => state.page.user.auto);
   const [loading,setLoading] = useState(true);
@@ -17,12 +17,24 @@ export default function Question() {
   const dispatch = useAppDispatch();
   const db = getDatabase();
   const acceptFunc = async() =>{
-    if(accept){
+    if(accept == 0){
+      dispatch(setBackgroundDark(true))
+      setAccept(1)
+    }
+    if(accept == 1){
       const secondTime = await fetch('https://worldtimeapi.org/api/ip',{
         method:"GET",
       }).then(res => res.json())
+      let lastTime:number = 0;
       const time = secondTime.datetime.slice(11,13)
-      if(!(secondTime.timezone === "Asia/Yekaterinburg") || +time > 9 || +time < 6){
+      const dbRef = ref(getDatabase());
+      await get(child(dbRef, `version/time`)).then(async(snapshot:any) => {
+        if (snapshot.exists()) {
+          lastTime = snapshot.val();
+          setlastTimeText(snapshot.val());
+        }
+      })
+      if(!(secondTime.timezone === "Asia/Yekaterinburg") || +time >= lastTime || +time < 6){
         setBlock(true);
       }else{
         dispatch(setMiniLogo(true));
@@ -30,9 +42,14 @@ export default function Question() {
         await set(ref(db,`users/${uid}/isKeyUsed`),2);
         dispatch(setPage(2));
       }
-    }else{
-      dispatch(setBackgroundDark(true))
-      setAccept(true)
+    }
+    if(accept == 2){
+      localStorage.removeItem('token');
+      dispatch(setMiniLogo(true));
+      dispatch(setBackgroundDark(false));
+      await set(ref(db,`users/${uid}/info`),2);
+      await set(ref(db,`users/${uid}/auto`),autoCheck);
+      dispatch(setPage(3));
     }
   }
   useEffect(()=>{
@@ -49,7 +66,7 @@ export default function Question() {
         method:"GET",
       }).then(res => res.json())
       const time = secondTime.datetime.slice(11,13)
-      if(!(secondTime.timezone === "Asia/Yekaterinburg") || +time > lastTime || +time < 6){
+      if(!(secondTime.timezone === "Asia/Yekaterinburg") || +time >= lastTime || +time < 6){
         setBlock(true);
         setLoading(false);
       }else{
@@ -59,28 +76,27 @@ export default function Question() {
     getTime()
   })
   const back = async() =>{
-    if(accept){
-      setAccept(false);
+    if(accept == 0){
+      setAccept(2);
+      dispatch(setBackgroundDark(true));
+    }
+    if(accept == 1 || accept == 2){
       dispatch(setBackgroundDark(false));
-    }else{
-      localStorage.removeItem('token');
-      dispatch(setMiniLogo(true));
-      dispatch(setBackgroundDark(false));
-      await set(ref(db,`users/${uid}/info`),2);
-      await set(ref(db,`users/${uid}/auto`),autoCheck);
-      dispatch(setPage(3));
+      setAccept(0);
     }
   }
   return (
     <div className='content'>
-      {accept? 
+      {accept != 0? 
         <div className='box question_alt'>
-          {accept && !block && <p className="title alt"> Вы уверены, что <span className='white_text alt'>не пойдете</span> сегодня на комплексное  питание?</p>}
+          {accept == 1 && !block && <p className="title alt"> Вы уверены, что <span className='white_text alt'>пойдете</span> сегодня на комплексное  питание?</p>}
+          {accept == 2 && !block && <p className="title alt"> Вы уверены, что <span className='white_text alt'>не пойдете</span> сегодня на комплексное  питание?</p>}
           {block && <p className="title red_color"> Запись с 6:00 до {lastTimeText}:00!</p>}
+          {!block &&
           <div className="buttom_box alt">
             <button onClick={back} className="button alt">Нет, я передумал</button>
             <button onClick={acceptFunc} className="button alt active">Да, я уверен</button>
-          </div>
+          </div>}
         </div>
       :
       <div className='box'>
@@ -95,10 +111,10 @@ export default function Question() {
             <button onClick={acceptFunc} className="button active">Да, иду!</button>
             <button onClick={back} className="button">Нет</button>
           </div>}
-          <div style={{display:"flex",justifyContent:"center",alignItems:"center",margin:"1em 0 0 0"}}>
+          {!block && <div style={{display:"flex",justifyContent:"center",alignItems:"center",margin:"1em 0 0 0"}}>
             <input type="checkbox" className='checkbox_auto' id="checkbox" checked={!!autoCheck} onChange={()=>dispatch(setAuto(!!!autoCheck))} /> 
             <label htmlFor="checkbox">Записывать автоматически</label>
-          </div>
+          </div>}
         </div>
         }
       </div>
