@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import { userInterface } from '../src/types/types'
-
 type pageState = {
     page:number,
     personal:boolean,

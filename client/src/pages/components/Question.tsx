@@ -16,6 +16,13 @@ export default function Question() {
   const uid = useAppSelector(state => state.page.uid)
   const dispatch = useAppDispatch();
   const db = getDatabase();
+  const changeEventCheckBox = async()=>{
+    const checkBox = document.querySelector('#checkbox') as HTMLInputElement;
+    checkBox.disabled = true;
+    await set(ref(db,`users/${uid}/auto`),autoCheck ? 0 : 1);
+    dispatch(setAuto(!!!autoCheck));
+    checkBox.disabled = false;
+  }
   const acceptFunc = async() =>{
     if(accept == 0){
       dispatch(setBackgroundDark(true))
@@ -48,7 +55,6 @@ export default function Question() {
       dispatch(setMiniLogo(true));
       dispatch(setBackgroundDark(false));
       await set(ref(db,`users/${uid}/info`),2);
-      await set(ref(db,`users/${uid}/auto`),autoCheck);
       dispatch(setPage(3));
     }
   }
@@ -112,7 +118,7 @@ export default function Question() {
             <button onClick={back} className="button">Нет</button>
           </div>}
           {!block && <div style={{display:"flex",justifyContent:"center",alignItems:"center",margin:"1em 0 0 0"}}>
-            <input type="checkbox" className='checkbox_auto' id="checkbox" checked={!!autoCheck} onChange={()=>dispatch(setAuto(!!!autoCheck))} /> 
+            <input type="checkbox" className='checkbox_auto' id="checkbox" checked={!!autoCheck} onChange={changeEventCheckBox} /> 
             <label htmlFor="checkbox">Записывать автоматически</label>
           </div>}
         </div>
