@@ -172,10 +172,11 @@ export default function Main() {
           setErrorUserType(3);
           setLoadingLogin(false);
           });
-        
         setLoadingLogin(false);
       } else {
-        console.log("No data available");
+        localStorage.removeItem('token');
+        setErrorUserType(3);
+        setLoadingLogin(false);
       }
     }).catch((error) => {
       console.log(error);
