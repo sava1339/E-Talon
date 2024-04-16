@@ -45,17 +45,17 @@ export default function Main() {
     await get(child(dbRef, `users/${uid}`)).then(async(snapshot) => {
       if (snapshot.exists()) {
         const user:userInterface = snapshot.val();
-        if(start == 0 && user.username.toLowerCase() === "g@gmail.com"){
+        if(start == 0 && user.username === "g@gmail.com"){
           setErrorUserType(1);
           setLoadingLogin(false);
           return;
         }
-        if(start == 1 && user.username.toLowerCase() !== "g@gmail.com"){
+        if(start == 1 && user.username !== "g@gmail.com"){
           setErrorUserType(1);
           setLoadingLogin(false);
           return;
         }
-        if(start == 1 && user.username.toLowerCase() === "g@gmail.com"){
+        if(start == 1 && user.username === "g@gmail.com"){
           personal = true;
           if(user.info === null || user.info === 0){
             await set(ref(db,`users/${uid}/info`),1);
@@ -64,7 +64,7 @@ export default function Main() {
             await set(ref(db,`users/${uid}/payment`),1);
           }
         }
-        if(start == 0 && user.username.toLowerCase() !== "g@gmail.com"){
+        if(start == 0 && user.username !== "g@gmail.com"){
           personal = false;
           if(user.info === null || user.info === 0){
             await set(ref(db,`users/${uid}/info`),1);
@@ -189,7 +189,7 @@ export default function Main() {
     dispatch(setShowChangePassword(false));
     const auth = getAuth();
     setLoadingLogin(true);
-    await signInWithEmailAndPassword (auth, login.toLowerCase(),password.toLowerCase())
+    await signInWithEmailAndPassword (auth, login.toLowerCase(),password)
       .then(async(userCredential) => {
         const getUser = userCredential.user;
         authUser(getUser.uid,userTypeSelect);
