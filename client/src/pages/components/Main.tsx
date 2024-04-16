@@ -166,7 +166,12 @@ export default function Main() {
               return;
             }
           }
-        })
+        }).catch((error) => {
+          console.log(error);
+          localStorage.removeItem('token');
+          setErrorUserType(3);
+          setLoadingLogin(false);
+          });
         
         setLoadingLogin(false);
       } else {
