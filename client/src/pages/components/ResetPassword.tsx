@@ -25,17 +25,18 @@ export default function ResetPassword() {
                     await sendPasswordResetEmail(auth, resEmail)
                     .then(() => {
                       setPaswordChangingError(2);
+                      return;
                     })
                     .catch((e) => {
                         console.log(e);
-                      setPaswordChangingError(1);
+                        setPaswordChangingError(1);
+                        return;
                     });
                 }
               }
             }
           }
         );
-        setPaswordChangingError(1);
       }
   return (
     <div className='reset_password'>
@@ -58,7 +59,7 @@ export default function ResetPassword() {
                     <img src={emailIcon} alt="" />
                     <input value={resEmail} onChange={(event:React.ChangeEvent<HTMLInputElement>)=> setResEmail(event.target.value)} className='user_input' placeholder='example@gmail.com' type="email" />
                 </div>
-                <button onClick={resetPassword} className='button active'>Получить пароль</button>
+                <button onClick={resetPassword} className='button active'>Получить письмо</button>
             </div>
         </div>
     </div>

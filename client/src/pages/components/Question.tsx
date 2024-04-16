@@ -4,6 +4,7 @@ import '../styles/question.css';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
 import { setAuto, setBackgroundDark, setMiniLogo, setPage } from '../../../reducers/pageReducer';
 import { set, ref, getDatabase, get, child } from 'firebase/database';
+import Back from '../../assets/back.svg?react';
 
 
 
@@ -91,6 +92,12 @@ export default function Question() {
       setAccept(0);
     }
   }
+  const quit = () =>{
+    localStorage.removeItem('token');
+    dispatch(setMiniLogo(false));
+    dispatch(setBackgroundDark(false));
+    dispatch(setPage(0));
+  }
   return (
     <div className='content'>
       {accept != 0? 
@@ -98,6 +105,7 @@ export default function Question() {
           {accept == 1 && !block && <p className="title alt"> Вы уверены, что <span className='white_text alt'>пойдете</span> сегодня на комплексное  питание?</p>}
           {accept == 2 && !block && <p className="title alt"> Вы уверены, что <span className='white_text alt'>не пойдете</span> сегодня на комплексное  питание?</p>}
           {block && <p className="title red_color"> Запись с 6:00 до {lastTimeText}:00!</p>}
+          {block && <div onClick={quit} className='button i_c'> <Back stroke='#fff' className="back" /> <p>Выйти</p></div>}
           {!block &&
           <div className="buttom_box alt">
             <button onClick={back} className="button alt">Нет, я передумал</button>
@@ -112,6 +120,7 @@ export default function Question() {
         <div>
           {!block && <p className="title"> Идете ли вы <span className='white_text'>сегодня на комплекс?</span></p>}
           {block && <p className="title red_color"> Запись с 6:00 до {lastTimeText}:00 утра!</p>}
+          {block && <div onClick={quit} className='button i_c'> <Back stroke='#fff' className="back" /> <p>Выйти</p></div>}
           {!block && 
           <div className="buttom_box">
             <button onClick={acceptFunc} className="button active">Да, иду!</button>

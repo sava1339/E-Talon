@@ -66,10 +66,13 @@ export default function Main() {
         }
         if(start == 0 && user.username !== "g@gmail.com"){
           personal = false;
-          if(user.info === null || user.info === 0){
+          if(user.info === null){
             await set(ref(db,`users/${uid}/info`),1);
           }
-          if(user.payment === null || user.payment === 0){
+          if(user.payment === null){
+            await set(ref(db,`users/${uid}/payment`),1);
+          }
+          if(user.isKeyUsed === null){
             await set(ref(db,`users/${uid}/payment`),1);
           }
         }
