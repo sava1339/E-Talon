@@ -167,12 +167,16 @@ export default function Main() {
             }
           }
         })
+        
         setLoadingLogin(false);
       } else {
         console.log("No data available");
       }
     }).catch((error) => {
       console.log(error);
+      localStorage.removeItem('token');
+      setErrorUserType(3);
+      setLoadingLogin(false);
       });
   }
   useEffect(()=>{
